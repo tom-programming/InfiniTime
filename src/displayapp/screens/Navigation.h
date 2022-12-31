@@ -17,6 +17,7 @@
 */
 #pragma once
 
+#ifdef NAV
 #include <FreeRTOS.h>
 #include <lvgl/src/lv_core/lv_obj.h>
 #include <string>
@@ -55,3 +56,5 @@ namespace Pinetime {
     }
   }
 }
+
+#endif

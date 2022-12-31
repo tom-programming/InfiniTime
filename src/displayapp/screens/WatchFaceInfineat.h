@@ -1,4 +1,5 @@
 #pragma once
+#ifdef WP
 
 #include <lvgl/lvgl.h>
 #include <chrono>
@@ -145,3 +146,4 @@ namespace Pinetime {
     }
   }
 }
+#endif

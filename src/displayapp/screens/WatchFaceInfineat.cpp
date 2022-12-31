@@ -1,3 +1,5 @@
+#ifdef WP
+
 #include "displayapp/screens/WatchFaceInfineat.h"
 
 #include <date/date.h>
@@ -630,3 +632,4 @@ bool WatchFaceInfineat::IsAvailable(Pinetime::Controllers::FS& filesystem) {
   filesystem.FileClose(&file);
   return true;
 }
+#endif

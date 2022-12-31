@@ -26,6 +26,11 @@ namespace {
     auto* screen = static_cast<HeartRate*>(obj->user_data);
     screen->OnStartStopEvent(event);
   }
+  
+  void btnLowPowerRecordEventHandler(lv_obj_t* obj, lv_event_t event) {
+    auto* screen = static_cast<HeartRate*>(obj->user_data);
+    screen->OnStartStopLowPowerRecordEvent(event);
+  }
 }
 
 HeartRate::HeartRate(Pinetime::Applications::DisplayApp* app,
@@ -56,16 +61,30 @@ HeartRate::HeartRate(Pinetime::Applications::DisplayApp* app,
 
   lv_obj_align(label_status, label_hr, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
 
+  // start stop button
   btn_startStop = lv_btn_create(lv_scr_act(), nullptr);
   btn_startStop->user_data = this;
   lv_obj_set_height(btn_startStop, 50);
   lv_obj_set_event_cb(btn_startStop, btnStartStopEventHandler);
-  lv_obj_align(btn_startStop, nullptr, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
+  lv_obj_align(btn_startStop, nullptr, LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
 
   label_startStop = lv_label_create(btn_startStop, nullptr);
   UpdateStartStopButton(isHrRunning);
   if (isHrRunning)
     systemTask.PushMessage(Pinetime::System::Messages::DisableSleeping);
+  
+  // low power record button
+  btn_lowPowerRecord = lv_btn_create(lv_scr_act(), nullptr);
+  btn_lowPowerRecord->user_data = this;
+  lv_obj_set_height(btn_lowPowerRecord, 50);
+  lv_obj_set_event_cb(btn_lowPowerRecord, btnLowPowerRecordEventHandler);
+  lv_obj_align(btn_lowPowerRecord, nullptr, LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
+
+  label_lowPowerRecord = lv_label_create(btn_lowPowerRecord, nullptr);
+  lv_label_set_text_static(label_lowPowerRecord, "LP rec");
+  //lv_obj_set_style_local_text_color(label_lowPowerRecord, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::lightGray);
+  UpdateStartStopLowPowerRecordButton(isHrRunning, heartRateController.LowPowerRecordState() == Controllers::HeartRateController::LowPowerRecordStates::Running);
+  //UpdateStartStopButton(isHrRunning);
 
   taskRefresh = lv_task_create(RefreshTaskCallback, 100, LV_TASK_PRIO_MID, this);
 }
@@ -106,6 +125,12 @@ void HeartRate::OnStartStopEvent(lv_event_t event) {
       systemTask.PushMessage(Pinetime::System::Messages::EnableSleeping);
       lv_obj_set_style_local_text_color(label_hr, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::lightGray);
     }
+#ifdef SIM
+    UpdateStartStopLowPowerRecordButton(true, false);
+#else
+    UpdateStartStopLowPowerRecordButton(heartRateController.State() != Controllers::HeartRateController::States::Stopped, 
+                                        heartRateController.LowPowerRecordState() == Controllers::HeartRateController::LowPowerRecordStates::Running);
+#endif
   }
 }
 
@@ -114,4 +139,39 @@ void HeartRate::UpdateStartStopButton(bool isRunning) {
     lv_label_set_text_static(label_startStop, "Stop");
   else
     lv_label_set_text_static(label_startStop, "Start");
+}
+
+void HeartRate::OnStartStopLowPowerRecordEvent(lv_event_t event) {
+  if (event == LV_EVENT_CLICKED) {
+#ifdef SIM
+	  UpdateStartStopLowPowerRecordButton(true,true);
+#else
+	  if (heartRateController.LowPowerRecordState() == Controllers::HeartRateController::LowPowerRecordStates::Stopped) {
+	    heartRateController.StartLowPowerRecord();
+  	    UpdateStartStopLowPowerRecordButton(
+	            heartRateController.State() != Controllers::HeartRateController::States::Stopped,
+	            heartRateController.LowPowerRecordState() != Controllers::HeartRateController::LowPowerRecordStates::Stopped);
+	  }
+	  else {
+	    heartRateController.StopLowPowerRecord();
+  	    UpdateStartStopLowPowerRecordButton(
+	            heartRateController.State() != Controllers::HeartRateController::States::Stopped,
+	            heartRateController.LowPowerRecordState() != Controllers::HeartRateController::LowPowerRecordStates::Stopped);
+	  }
+#endif
+  }
+}
+
+void HeartRate::UpdateStartStopLowPowerRecordButton(bool isRunning, bool isLPRRunning) {
+  if (isRunning) {
+    if (isLPRRunning) {
+      lv_obj_set_style_local_text_color(label_lowPowerRecord, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::green);
+    }
+    else {
+      lv_obj_set_style_local_text_color(label_lowPowerRecord, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::orange);
+    }
+  }
+  else {
+    lv_obj_set_style_local_text_color(label_lowPowerRecord, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Colors::lightGray);
+  }
 }

@@ -18,7 +18,7 @@
  * Based on WatchFaceDigital
  * Style/layout copied from TimeStyle for Pebble by Dan Tilden (github.com/tilden)
  */
-
+#ifdef WP
 #include "displayapp/screens/WatchFacePineTimeStyle.h"
 #include <date/date.h>
 #include <lvgl/lvgl.h>
@@ -708,3 +708,4 @@ Pinetime::Controllers::Settings::Colors WatchFacePineTimeStyle::GetPrevious(Pine
   }
   return prevColor;
 }
+#endif

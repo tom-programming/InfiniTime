@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#ifdef MUS
 #include "components/ble/MusicService.h"
 #include "systemtask/SystemTask.h"
 #include <cstring>
@@ -220,3 +221,5 @@ void Pinetime::Controllers::MusicService::event(char event) {
 
   ble_gattc_notify_custom(connectionHandle, eventHandle, om);
 }
+
+#endif

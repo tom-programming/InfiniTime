@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#ifdef MUS
 #include "displayapp/screens/Music.h"
 #include "displayapp/screens/Symbols.h"
 #include <cstdint>
@@ -281,3 +282,4 @@ bool Music::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
     }
   }
 }
+#endif

@@ -16,6 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
+#ifdef WEATH
 
 /**
  * Different weather events, weather data structures used by {@link WeatherService.h}
@@ -383,3 +384,5 @@ namespace Pinetime {
     };
   }
 }
+
+#endif

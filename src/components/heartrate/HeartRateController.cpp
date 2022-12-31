@@ -26,6 +26,22 @@ void HeartRateController::Stop() {
   }
 }
 
+#ifndef SIM
+void HeartRateController::StartLowPowerRecord() {
+  if (task != nullptr) {
+    lowPowerRecordState = LowPowerRecordStates::Running;
+    task->PushMessage(Pinetime::Applications::HeartRateTask::Messages::SetLPROn);
+  }
+}
+
+void HeartRateController::StopLowPowerRecord() {
+  if (task != nullptr) {
+    lowPowerRecordState = LowPowerRecordStates::Stopped;
+    task->PushMessage(Pinetime::Applications::HeartRateTask::Messages::SetLPROff);
+  }
+}
+#endif
+
 void HeartRateController::SetHeartRateTask(Pinetime::Applications::HeartRateTask* task) {
   this->task = task;
 }

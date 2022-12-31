@@ -96,13 +96,20 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       } else {
         resp.chunklen = std::min(header->chunksize, info.size); // TODO add mtu somehow
         resp.totallen = info.size;
-        fs.FileOpen(&f, filepath, LFS_O_RDONLY);
-        fs.FileSeek(&f, header->chunkoff);
-        uint8_t fileData[resp.chunklen] = {0};
-        resp.chunklen = fs.FileRead(&f, fileData, resp.chunklen);
-        om = ble_hs_mbuf_from_flat(&resp, sizeof(ReadResponse));
-        os_mbuf_append(om, fileData, resp.chunklen);
-        fs.FileClose(&f);
+        int err = fs.FileOpen(&f, filepath, LFS_O_RDONLY);
+        if (err == LFS_ERR_OK) {
+          fs.FileSeek(&f, header->chunkoff);
+          uint8_t fileData[resp.chunklen] = {0};
+          resp.chunklen = fs.FileRead(&f, fileData, resp.chunklen);
+          om = ble_hs_mbuf_from_flat(&resp, sizeof(ReadResponse));
+          os_mbuf_append(om, fileData, resp.chunklen);
+          fs.FileClose(&f);
+	    }
+	    else {
+	      resp.chunklen = 0;
+          resp.totallen = 0;
+          om = ble_hs_mbuf_from_flat(&resp, sizeof(ReadResponse));
+	    }
       }
 
       ble_gattc_notify_custom(connectionHandle, transferCharacteristicHandle, om);

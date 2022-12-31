@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#ifdef NAV
 #include "displayapp/screens/Navigation.h"
 #include <cstdint>
 #include "displayapp/DisplayApp.h"
@@ -197,3 +198,4 @@ void Navigation::Refresh() {
     }
   }
 }
+#endif

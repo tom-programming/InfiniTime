@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#ifdef WEATH
 #include "Weather.h"
 #include <lvgl/lvgl.h>
 #include <components/ble/weather/WeatherService.h>
@@ -220,3 +221,4 @@ std::unique_ptr<Screen> Weather::CreateScreenHumidity() {
   lv_obj_align(label, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
   return std::unique_ptr<Screen>(new Screens::Label(0, 5, app, label));
 }
+#endif

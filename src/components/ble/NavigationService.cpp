@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
+#ifdef NAV
 #include "components/ble/NavigationService.h"
 
 #include "systemtask/SystemTask.h"
@@ -117,3 +117,5 @@ std::string Pinetime::Controllers::NavigationService::getManDist() {
 int Pinetime::Controllers::NavigationService::getProgress() {
   return m_progress;
 }
+
+#endif

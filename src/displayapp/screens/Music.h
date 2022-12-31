@@ -16,7 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-
+#ifdef MUS
 #include <FreeRTOS.h>
 #include <lvgl/src/lv_core/lv_obj.h>
 #include <string>
@@ -84,3 +84,4 @@ namespace Pinetime {
     }
   }
 }
+#endif

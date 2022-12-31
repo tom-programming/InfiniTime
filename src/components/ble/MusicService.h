@@ -17,6 +17,8 @@
 */
 #pragma once
 
+#ifdef MUS
+
 #include <cstdint>
 #include <string>
 #define min // workaround: nimble's min/max macros conflict with libstdc++
@@ -92,3 +94,5 @@ namespace Pinetime {
     };
   }
 }
+
+#endif

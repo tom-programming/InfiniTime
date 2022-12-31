@@ -98,10 +98,9 @@ TimerHandle_t debounceChargeTimer;
 Pinetime::Controllers::Battery batteryController;
 Pinetime::Controllers::Ble bleController;
 
-Pinetime::Controllers::HeartRateController heartRateController;
-Pinetime::Applications::HeartRateTask heartRateApp(heartRateSensor, heartRateController);
-
 Pinetime::Controllers::FS fs {spiNorFlash};
+Pinetime::Controllers::HeartRateController heartRateController;
+
 Pinetime::Controllers::Settings settingsController {fs};
 Pinetime::Controllers::MotorController motorController {};
 
@@ -115,6 +114,8 @@ Pinetime::Controllers::AlarmController alarmController {dateTimeController};
 Pinetime::Controllers::TouchHandler touchHandler(touchPanel, lvgl);
 Pinetime::Controllers::ButtonHandler buttonHandler;
 Pinetime::Controllers::BrightnessController brightnessController {};
+
+Pinetime::Applications::HeartRateTask heartRateApp(heartRateSensor, heartRateController, fs, dateTimeController, spiNorFlash);
 
 Pinetime::Applications::DisplayApp displayApp(lcd,
                                               lvgl,

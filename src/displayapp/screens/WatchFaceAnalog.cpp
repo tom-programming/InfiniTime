@@ -1,3 +1,5 @@
+#ifdef WP
+
 #include "displayapp/screens/WatchFaceAnalog.h"
 #include <cmath>
 #include <lvgl/lvgl.h>
@@ -228,3 +230,4 @@ void WatchFaceAnalog::Refresh() {
     }
   }
 }
+#endif

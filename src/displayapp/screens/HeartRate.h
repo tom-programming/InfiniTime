@@ -22,16 +22,22 @@ namespace Pinetime {
         void Refresh() override;
 
         void OnStartStopEvent(lv_event_t event);
+        void OnStartStopLowPowerRecordEvent(lv_event_t event);
 
       private:
         Controllers::HeartRateController& heartRateController;
         Pinetime::System::SystemTask& systemTask;
         void UpdateStartStopButton(bool isRunning);
+        void UpdateStartStopLowPowerRecordButton(bool isRunning, bool isLPRRunning);
         lv_obj_t* label_hr;
         lv_obj_t* label_bpm;
         lv_obj_t* label_status;
+
         lv_obj_t* btn_startStop;
         lv_obj_t* label_startStop;
+
+        lv_obj_t* btn_lowPowerRecord;
+        lv_obj_t* label_lowPowerRecord;
 
         lv_task_t* taskRefresh;
       };

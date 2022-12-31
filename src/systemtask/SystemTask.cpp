@@ -370,10 +370,11 @@ void SystemTask::Work() {
           if (BootloaderVersion::IsValid()) {
             // First versions of the bootloader do not expose their version and cannot initialize the SPI NOR FLASH
             // if it's in sleep mode. Avoid bricked device by disabling sleep mode on these versions.
-            spiNorFlash.Sleep();
+            
+            // spiNorFlash.Sleep();
           }
           lcd.Sleep();
-          spi.Sleep();
+          //spi.Sleep();
 
           // Double Tap needs the touch screen to be in normal mode
           if (!settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::DoubleTap)) {
