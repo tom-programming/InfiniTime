@@ -259,7 +259,6 @@ HeartRateTask::HeartRateTask(Drivers::Hrs3300& heartRateSensor,
 	 buffer = new uint8_t[BUFFER_DIM];
 	 buffer_index = 0;
 	 errorCode = 0;
-	 counter_rounds = 0;
 }
 
 void HeartRateTask::Start() {
@@ -277,8 +276,6 @@ void HeartRateTask::Process(void* instance) {
 
 void HeartRateTask::AddToBuffer(uint8_t meas, uint32_t time) {
   if (buffer_index*5 + 1 > BUFFER_DIM) {
-	  counter_rounds += 1;
-
 	  vTaskPrioritySet(taskHandle, 2);
 	  lfs_file_t hrsFile;
 	  int err = fs.FileOpen(&hrsFile, "/hrs.dat", LFS_O_WRONLY | LFS_O_CREAT | LFS_O_APPEND);
@@ -286,10 +283,6 @@ void HeartRateTask::AddToBuffer(uint8_t meas, uint32_t time) {
 		  errorCode = err;
 	  }
   	  else {
-	/*	  if (counter_rounds > 2) {
-				fs.FileClose(&hrsFile);
-				return;
-			}*/
 		 fs.FileWrite(&hrsFile, buffer, BUFFER_DIM);
 		 fs.FileClose(&hrsFile);
 	  }
@@ -377,7 +370,7 @@ void HeartRateTask::Work() {
         auto duration = newMeasurement - lastMeasurement;
         unsigned int passed_secs = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
   
-        controller.Update(Controllers::HeartRateController::States::Running, counter_rounds);
+        controller.Update(Controllers::HeartRateController::States::Running, errorCode);
   
         if (passed_secs > 2) {
 		  lastMeasurement = newMeasurement;   

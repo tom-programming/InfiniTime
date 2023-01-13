@@ -64,7 +64,6 @@ SetLPROn, SetLPROff
       uint8_t *buffer; //[5];
       uint8_t buffer_index;
       uint8_t errorCode;
-      uint8_t counter_rounds;
 #ifndef SIM
       bool measuringLP = false;
 #endif
