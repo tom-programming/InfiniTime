@@ -288,7 +288,7 @@ void HeartRateTask::AddToBuffer(uint8_t meas, uint32_t time) {
 	  }
 	  // dummy read
 	  int err2 = fs.FileOpen(&hrsFile, "/hrs.dat", LFS_O_RDONLY);
-	  if (err2 != LFS_ERR_OK) {
+	  if (err2 == LFS_ERR_OK) {
 		fs.FileRead(&hrsFile, buffer, BUFFER_DIM);
 		fs.FileClose(&hrsFile);
 	  }
