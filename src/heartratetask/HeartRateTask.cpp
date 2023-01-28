@@ -86,6 +86,7 @@ const uint8_t init_register_array[][2] = {
 
 void Hrs3300_set_exinf(uint8_t age, uint8_t height, uint8_t weight , uint8_t gender , uint8_t ref_sbp , uint8_t ref_dbp);
 extern bool Hrs3300_alg_open(void);
+extern void Hrs3300_alg_close(void);
 void Hrs3300_write_reg(uint8_t addr, uint8_t data);
 uint8_t Hrs3300_read_reg(uint8_t addr);
 
@@ -369,7 +370,7 @@ void HeartRateTask::Work() {
         auto duration = newMeasurement - lastMeasurement;
         unsigned int passed_secs = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
   
-        controller.Update(Controllers::HeartRateController::States::Running, newMeasurement);
+        controller.Update(Controllers::HeartRateController::States::Running, bpm);
   
         if (passed_secs > 2) {
 		  lastMeasurement = newMeasurement;   
@@ -406,6 +407,7 @@ void HeartRateTask::StartMeasurement() {
 }
 
 void HeartRateTask::StopMeasurement() {
+  Hrs3300_alg_close();
   Hrs3300_chip_disable();
 //  heartRateSensor.Disable();
   vTaskDelay(100);
