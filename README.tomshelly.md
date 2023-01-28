@@ -38,5 +38,7 @@ run `start_gdb_gpio.sh`.
 
 1. Start gdb
 2. `target remote localhost:3333`
-3. Add symbols: `add-symbols ./build/output/src/pinetime-mcuboot-app-1.24.0.out`
+3. Add symbols: `add-symbol-file ./build/output/src/pinetime-mcuboot-app-1.24.0.out`
+
+Recommended breakpoint: `HardFault_Handler`
 
