@@ -370,7 +370,7 @@ void HeartRateTask::Work() {
         auto duration = newMeasurement - lastMeasurement;
         unsigned int passed_secs = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
   
-        controller.Update(Controllers::HeartRateController::States::Running, errorCode);
+        controller.Update(Controllers::HeartRateController::States::Running, newMeasurement);
   
         if (passed_secs > 2) {
 		  lastMeasurement = newMeasurement;   
