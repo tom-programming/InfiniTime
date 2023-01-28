@@ -13,9 +13,10 @@ namespace Pinetime {
   }
   namespace Controllers {
     class Ble;
+    class HeartRateController;
     class FSService {
     public:
-      FSService(Pinetime::System::SystemTask& systemTask, Pinetime::Controllers::FS& fs);
+      FSService(Pinetime::System::SystemTask& systemTask, Pinetime::Controllers::FS& fs, Pinetime::Controllers::HeartRateController& heartRateController);
       void Init();
 
       int OnFSServiceRequested(uint16_t connectionHandle, uint16_t attributeHandle, ble_gatt_access_ctxt* context);
@@ -45,6 +46,7 @@ namespace Pinetime {
       struct ble_gatt_svc_def serviceDefinition[2];
       uint16_t versionCharacteristicHandle;
       uint16_t transferCharacteristicHandle;
+      Controllers::HeartRateController& heartRateController;
 
       enum class commands : uint8_t {
         INVALID = 0x00,

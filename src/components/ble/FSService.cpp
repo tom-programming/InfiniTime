@@ -2,6 +2,7 @@
 #include "FSService.h"
 #include "components/ble/BleController.h"
 #include "systemtask/SystemTask.h"
+#include "components/heartrate/HeartRateController.h"
 
 using namespace Pinetime::Controllers;
 
@@ -14,9 +15,10 @@ int FSServiceCallback(uint16_t conn_handle, uint16_t attr_handle, struct ble_gat
   return fsService->OnFSServiceRequested(conn_handle, attr_handle, ctxt);
 }
 
-FSService::FSService(Pinetime::System::SystemTask& systemTask, Pinetime::Controllers::FS& fs)
+FSService::FSService(Pinetime::System::SystemTask& systemTask, Pinetime::Controllers::FS& fs, Pinetime::Controllers::HeartRateController& heartRateController)
   : systemTask {systemTask},
     fs {fs},
+    heartRateController {heartRateController}, // ugly
     characteristicDefinition {{.uuid = &fsVersionUuid.u,
                                .access_cb = FSServiceCallback,
                                .arg = this,
@@ -82,6 +84,14 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       }
       memcpy(filepath, header->pathstr, plen);
       filepath[plen] = 0; // Copy and null terminate string
+      if(strcmp(filepath, "START")) {
+        heartRateController.Start();
+        //return -1;
+      }
+      if (strcmp(filepath, "STOP")) {
+        heartRateController.Stop();
+        //return -1;
+      }
       ReadResponse resp;
       os_mbuf* om;
       resp.command = commands::READ_DATA;
