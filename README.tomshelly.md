@@ -42,3 +42,25 @@ run `start_gdb_gpio.sh`.
 
 Recommended breakpoint: `HardFault_Handler`
 
+
+#### Mysterious bug: FS faults (interaction with BLE? FreeRTOS?)
+
+Thanks to Sugru we were able to crash the Pinetime a hundred times more than usual! (Yay!)
+We delved into the depth of Tom's BLE client, writing raw buffers with commands such as read, delete file.
+We "extended" the command set to support starting and stopping the heart rate task from the file read command.
+We saw that combinations such as start-stop-ls-start are crashing. But not always...
+We found that the lfs mlist and its next element are in constant memory locations:
+```
+(gdb) p &(lfs->mlist)
+$22 = (struct lfs_mlist **) 0x2000054c <fs+124>
+(gdb) p &(lfs->mlist->next)
+$23 = (struct lfs_mlist **) 0x20006b10 <ucHeap+6932>
+```
+so we tried to watch those addresses. We discovered that the code of FreeRTOS that is responsible for context switching tends to write to `0x20006b10` sometimes 0, sometimes 1. This could explain some of the crashes.
+But why would we see such writes? This is something we do not yet understand.
+
+We disabled the sketchy Arduino-like linked library to connect to the heart sensor and read/writes to `settings.dat` itself in the hope to isolate the problem. Nothing changed, except maybe we get more crashes now.
+
+We made LFS nuke itself everytime FS is initialized (format).
+
+Who will be our next Tarnegol Kaparot?
