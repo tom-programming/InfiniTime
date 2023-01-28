@@ -279,19 +279,18 @@ void HeartRateTask::AddToBuffer(uint8_t meas, uint32_t time) {
 	  vTaskPrioritySet(taskHandle, 2);
 	  lfs_file_t hrsFile;
 	  int err = fs.FileOpen(&hrsFile, "/hrs.dat", LFS_O_WRONLY | LFS_O_CREAT | LFS_O_APPEND);
-      if (err != LFS_ERR_OK) { // there is an error -> do nothing
+    if (err != LFS_ERR_OK) { // there is an error -> do nothing
 		  errorCode = err;
-	  }
-  	  else {
-		 fs.FileWrite(&hrsFile, buffer, BUFFER_DIM);
-		 fs.FileClose(&hrsFile);
+	  } else {
+		  fs.FileWrite(&hrsFile, buffer, BUFFER_DIM);
+		  fs.FileClose(&hrsFile);
 	  }
 	  // dummy read
-	  int err2 = fs.FileOpen(&hrsFile, "/hrs.dat", LFS_O_RDONLY);
+	  /*int err2 = fs.FileOpen(&hrsFile, "/hrs.dat", LFS_O_RDONLY);
 	  if (err2 == LFS_ERR_OK) {
-		fs.FileRead(&hrsFile, buffer, BUFFER_DIM);
-		fs.FileClose(&hrsFile);
-	  }
+      fs.FileRead(&hrsFile, buffer, BUFFER_DIM);
+      fs.FileClose(&hrsFile);
+	  }*/
 	  vTaskPrioritySet(taskHandle, 0);
 	  buffer_index = 0;
   }
