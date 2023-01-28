@@ -11,6 +11,9 @@
 
 `path_to_build` is usually `build/output/pinetime-mcuboot-app-image-1.24.0.bin`
 
+Make the tunnel first:
+`ssh -L 3333:localhost:3333 pi@10.100.102.14` (replace with current_ip_of_pi)
+
 ## Flashing
 
 ### In Raspberry
