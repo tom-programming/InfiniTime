@@ -64,3 +64,7 @@ We disabled the sketchy Arduino-like linked library to connect to the heart sens
 We made LFS nuke itself everytime FS is initialized (format).
 
 Who will be our next Tarnegol Kaparot?
+
+## GDB Tips & Tricks
+
+`dump binary memory result.bin 0x20000000 0x20010000`
