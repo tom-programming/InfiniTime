@@ -68,3 +68,6 @@ Who will be our next Tarnegol Kaparot?
 ## GDB Tips & Tricks
 
 `dump binary memory result.bin 0x20000000 0x20010000`
+
+
+memory model: the stack should be growing from the to of memory downwards `0x20010000` - heap should be from the start of memory upwards
