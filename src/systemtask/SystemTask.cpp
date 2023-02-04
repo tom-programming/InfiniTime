@@ -216,7 +216,7 @@ void SystemTask::Work() {
           // Make sure that exiting an app doesn't enable sleeping,
           // if the exiting was caused by a firmware update
           if (!bleController.IsFirmwareUpdating()) {
-            //doNotGoToSleep = false; (UGLY - for debugging)
+            doNotGoToSleep = false;
           }
           ReloadIdleTimer();
           break;
@@ -323,7 +323,7 @@ void SystemTask::Work() {
           if (bleController.State() == Pinetime::Controllers::Ble::FirmwareUpdateStates::Validated) {
             NVIC_SystemReset();
           }
-          // doNotGoToSleep = false; // UGLY disabled for debugging
+          doNotGoToSleep = false;
           xTimerStart(dimTimer, 0);
           break;
         case Messages::StartFileTransfer:
@@ -336,7 +336,7 @@ void SystemTask::Work() {
           break;
         case Messages::StopFileTransfer:
           NRF_LOG_INFO("[systemtask] FS Stopped");
-          //doNotGoToSleep = false; // UGLY disabled for debugging
+          doNotGoToSleep = false;
           xTimerStart(dimTimer, 0);
           // TODO add intent of fs access icon or something
           break;
