@@ -135,7 +135,7 @@ namespace Pinetime {
       TimerHandle_t dimTimer;
       TimerHandle_t idleTimer;
       TimerHandle_t measureBatteryTimer;
-      bool doNotGoToSleep = true; // UGLY - for debugging
+      bool doNotGoToSleep = false; // true; // UGLY - for debugging
       bool isDimmed = false;
       SystemTaskState state = SystemTaskState::Running;
 

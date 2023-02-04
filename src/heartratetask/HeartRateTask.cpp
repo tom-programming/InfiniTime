@@ -311,8 +311,9 @@ void HeartRateTask::Work() {
         delay = 39; // 40;
       else
         delay = 100; // 100;
-    } else
-      delay = portMAX_DELAY;
+    } else {
+      delay = 100; // orig: portMAX_DELAY;
+    }
 
     if (xQueueReceive(messageQueue, &msg, delay)) {
       switch (msg) {

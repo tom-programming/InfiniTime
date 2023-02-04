@@ -1,10 +1,10 @@
 # MOAS
 
 # clean
-#/opt/build.sh clean
+/opt/build.sh clean
 
 # build
-#/opt/build.sh
+/opt/build.sh
 
 
 # check if tunnel exists

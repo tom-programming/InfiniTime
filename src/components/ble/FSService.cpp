@@ -86,11 +86,13 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       filepath[plen] = 0; // Copy and null terminate string
       if(strcmp(filepath, "START")==0) {
         heartRateController.Start();
-        return -1;
+        heartRateController.StartLowPowerRecord();
+        break;
       }
       if (strcmp(filepath, "STOP")==0) {
         heartRateController.Stop();
-        return -1;
+        heartRateController.StopLowPowerRecord();
+        break;
       }
       ReadResponse resp;
       os_mbuf* om;
