@@ -70,4 +70,14 @@ Who will be our next Tarnegol Kaparot?
 `dump binary memory result.bin 0x20000000 0x20010000`
 
 
-memory model: the stack should be growing from the to of memory downwards `0x20010000` - heap should be from the start of memory upwards
+memory model: the stack should be growing from the end of memory downwards `0x20010000` - heap should be from the start of memory upwards
+
+## HR algorithms
+
+- datasheet: https://files.pine64.org/doc/datasheet/pinetime/HRS3300%20Heart%20Rate%20Sensor.pdf
+
+- A long scary list of papers, algorithms and techniques is in https://github.com/mintisan/hr_estimate/blob/main/README.md
+
+- The closed source library does FFT at one point, the Infinitime default PPG does not
+
+- Probably a simple FFT + some other empirical hacks is the easiest way to do it, then maybe wavelets et al.
