@@ -306,9 +306,10 @@ void HeartRateTask::Work() {
   while (true) {
     Messages msg;
     uint32_t delay;
-    if (state == States::Running) {
+    // DOUBT: need to check the states here
+    if (state == States::Running || lowPowerRecordState == LowPowerRecordStates::Running) {
       if (measurementStarted)
-        delay = 39; // 40;
+        delay = 40; // 40;
       else
         delay = 100; // 100;
     } else {
@@ -373,7 +374,7 @@ void HeartRateTask::Work() {
   
         controller.Update(Controllers::HeartRateController::States::Running, bpm);
   
-        if (passed_secs > 2) {
+        if (passed_secs > 60) {
 		  lastMeasurement = newMeasurement;   
 		  unsigned int timePoint = std::chrono::duration_cast<std::chrono::seconds>(lastMeasurement.time_since_epoch()).count();   
           AddToBuffer(bpm, timePoint);

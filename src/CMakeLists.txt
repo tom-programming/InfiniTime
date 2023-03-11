@@ -786,9 +786,11 @@ add_definitions(-DNRF52 -DNRF52832 -DNRF52832_XXAA -DNRF52_PAN_74 -DNRF52_PAN_64
 add_definitions(-DFREERTOS)
 add_definitions(-D__STACK_SIZE=1024)
 add_definitions(-D__HEAP_SIZE=4096)
-#add_definitions(-DWEATH=1)
-#add_definitions(-DNAV=1)
-#add_definitions(-DMUS=1)
+
+# add_definitions(-DWEATH=1)
+# add_definitions(-DNAV=1)
+# add_definitions(-DMUS=1)
+
 add_definitions(-DWP=1)
 add_definitions(-DMYNEWT_VAL_BLE_LL_RFMGMT_ENABLE_TIME=1500)
 
