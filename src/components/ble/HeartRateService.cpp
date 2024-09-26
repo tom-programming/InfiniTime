@@ -24,6 +24,7 @@ HeartRateService::HeartRateService(Pinetime::System::SystemTask& system, Control
                                .arg = this,
                                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_NOTIFY,
                                .val_handle = &heartRateMeasurementHandle},
+                               
                               {0}},
     serviceDefinition {
       {/* Device Information Service */

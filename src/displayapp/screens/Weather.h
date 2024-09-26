@@ -1,5 +1,7 @@
+
 #pragma once
 
+#ifdef WEATH
 #include <memory>
 #include <components/ble/weather/WeatherService.h>
 #include "Screen.h"
@@ -43,3 +45,4 @@ namespace Pinetime {
     }
   }
 }
+#endif

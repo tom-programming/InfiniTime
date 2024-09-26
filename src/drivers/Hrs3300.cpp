@@ -12,6 +12,10 @@
 #include <task.h>
 #include <nrf_log.h>
 
+//extern "C" {
+//void Hrs3300_chip_enable()
+//}
+
 using namespace Pinetime::Drivers;
 /** Driver for the HRS3300 heart rate sensor.
  * Original implementation from wasp-os : https://github.com/daniel-thompson/wasp-os/blob/master/wasp/drivers/hrs3300.py
@@ -25,6 +29,7 @@ void Hrs3300::Init() {
   Disable();
   vTaskDelay(100);
 
+/*
   // HRS disabled, 12.5 ms wait time between cycles, (partly) 20mA drive
   WriteRegister(static_cast<uint8_t>(Registers::Enable), 0x60);
 
@@ -38,8 +43,10 @@ void Hrs3300::Init() {
 
   // 8x gain, non default, reduced value for better readings
   WriteRegister(static_cast<uint8_t>(Registers::Hgain), 0xc);
+  */
 }
 
+/*
 void Hrs3300::Enable() {
   NRF_LOG_INFO("ENABLE");
   auto value = ReadRegister(static_cast<uint8_t>(Registers::Enable));
@@ -47,13 +54,19 @@ void Hrs3300::Enable() {
   WriteRegister(static_cast<uint8_t>(Registers::Enable), value);
 }
 
+*/
+
+
 void Hrs3300::Disable() {
   NRF_LOG_INFO("DISABLE");
-  auto value = ReadRegister(static_cast<uint8_t>(Registers::Enable));
+  auto value = ReadRegister(0x01);
   value &= ~0x80;
-  WriteRegister(static_cast<uint8_t>(Registers::Enable), value);
+  WriteRegister(0x01, value);
 }
 
+
+
+/*
 uint32_t Hrs3300::ReadHrs() {
   auto m = ReadRegister(static_cast<uint8_t>(Registers::C0DataM));
   auto h = ReadRegister(static_cast<uint8_t>(Registers::C0DataH));
@@ -67,7 +80,9 @@ uint32_t Hrs3300::ReadAls() {
   auto l = ReadRegister(static_cast<uint8_t>(Registers::C1dataL));
   return ((h & 0x3f) << 11) | (m << 3) | (l & 0x07);
 }
+*/
 
+/*
 void Hrs3300::SetGain(uint8_t gain) {
   constexpr uint8_t maxGain = 64U;
   gain = std::min(gain, maxGain);
@@ -78,7 +93,9 @@ void Hrs3300::SetGain(uint8_t gain) {
 
   WriteRegister(static_cast<uint8_t>(Registers::Hgain), hgain << 2);
 }
+*/
 
+/*
 void Hrs3300::SetDrive(uint8_t drive) {
   auto en = ReadRegister(static_cast<uint8_t>(Registers::Enable));
   auto pd = ReadRegister(static_cast<uint8_t>(Registers::PDriver));
@@ -89,6 +106,7 @@ void Hrs3300::SetDrive(uint8_t drive) {
   WriteRegister(static_cast<uint8_t>(Registers::Enable), en);
   WriteRegister(static_cast<uint8_t>(Registers::PDriver), pd);
 }
+*/
 
 void Hrs3300::WriteRegister(uint8_t reg, uint8_t data) {
   auto ret = twiMaster.Write(twiAddress, reg, &data, 1);

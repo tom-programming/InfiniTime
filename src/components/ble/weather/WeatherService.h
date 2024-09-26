@@ -16,7 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
-
+#ifdef WEATH
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -171,3 +171,4 @@ namespace Pinetime {
     };
   }
 }
+#endif

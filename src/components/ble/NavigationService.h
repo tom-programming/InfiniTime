@@ -17,6 +17,7 @@
 */
 #pragma once
 
+#ifdef NAV
 #include <cstdint>
 #include <string>
 #define min // workaround: nimble's min/max macros conflict with libstdc++
@@ -61,3 +62,5 @@ namespace Pinetime {
     };
   }
 }
+
+#endif

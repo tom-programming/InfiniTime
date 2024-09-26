@@ -2,6 +2,7 @@
 #include "FSService.h"
 #include "components/ble/BleController.h"
 #include "systemtask/SystemTask.h"
+#include "components/heartrate/HeartRateController.h"
 
 using namespace Pinetime::Controllers;
 
@@ -14,9 +15,10 @@ int FSServiceCallback(uint16_t conn_handle, uint16_t attr_handle, struct ble_gat
   return fsService->OnFSServiceRequested(conn_handle, attr_handle, ctxt);
 }
 
-FSService::FSService(Pinetime::System::SystemTask& systemTask, Pinetime::Controllers::FS& fs)
+FSService::FSService(Pinetime::System::SystemTask& systemTask, Pinetime::Controllers::FS& fs, Pinetime::Controllers::HeartRateController& heartRateController)
   : systemTask {systemTask},
     fs {fs},
+    heartRateController {heartRateController}, // ugly
     characteristicDefinition {{.uuid = &fsVersionUuid.u,
                                .access_cb = FSServiceCallback,
                                .arg = this,
@@ -82,6 +84,16 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       }
       memcpy(filepath, header->pathstr, plen);
       filepath[plen] = 0; // Copy and null terminate string
+      if(strcmp(filepath, "START")==0) {
+        heartRateController.Start();
+        heartRateController.StartLowPowerRecord();
+        break;
+      }
+      if (strcmp(filepath, "STOP")==0) {
+        heartRateController.Stop();
+        heartRateController.StopLowPowerRecord();
+        break;
+      }
       ReadResponse resp;
       os_mbuf* om;
       resp.command = commands::READ_DATA;
@@ -96,13 +108,20 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       } else {
         resp.chunklen = std::min(header->chunksize, info.size); // TODO add mtu somehow
         resp.totallen = info.size;
-        fs.FileOpen(&f, filepath, LFS_O_RDONLY);
-        fs.FileSeek(&f, header->chunkoff);
-        uint8_t fileData[resp.chunklen] = {0};
-        resp.chunklen = fs.FileRead(&f, fileData, resp.chunklen);
-        om = ble_hs_mbuf_from_flat(&resp, sizeof(ReadResponse));
-        os_mbuf_append(om, fileData, resp.chunklen);
-        fs.FileClose(&f);
+        int err = fs.FileOpen(&f, filepath, LFS_O_RDONLY);
+        if (err == LFS_ERR_OK) {
+          fs.FileSeek(&f, header->chunkoff);
+          uint8_t fileData[resp.chunklen] = {0};
+          resp.chunklen = fs.FileRead(&f, fileData, resp.chunklen);
+          om = ble_hs_mbuf_from_flat(&resp, sizeof(ReadResponse));
+          os_mbuf_append(om, fileData, resp.chunklen);
+          fs.FileClose(&f);
+	    }
+	    else {
+	      resp.chunklen = 0;
+          resp.totallen = 0;
+          om = ble_hs_mbuf_from_flat(&resp, sizeof(ReadResponse));
+	    }
       }
 
       ble_gattc_notify_custom(connectionHandle, transferCharacteristicHandle, om);

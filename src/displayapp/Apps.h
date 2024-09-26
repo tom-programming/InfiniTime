@@ -15,17 +15,23 @@ namespace Pinetime {
       Alarm,
       FlashLight,
       BatteryInfo,
+#ifdef MUS
       Music,
+#endif
       Paint,
       Paddle,
       Twos,
       HeartRate,
+#ifdef NAV
       Navigation,
+#endif
       StopWatch,
       Metronome,
       Motion,
       Steps,
+#ifdef WEATH
       Weather,
+#endif
       PassKey,
       QuickSettings,
       Settings,

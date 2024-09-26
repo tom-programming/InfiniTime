@@ -267,9 +267,7 @@ namespace Pinetime {
         ChimesOption chimesOption = ChimesOption::None;
 
         PineTimeStyle PTS;
-
         WatchFaceInfineat watchFaceInfineat;
-
         std::bitset<4> wakeUpMode {0};
         uint16_t shakeWakeThreshold = 150;
         Controllers::BrightnessController::Levels brightLevel = Controllers::BrightnessController::Levels::Medium;

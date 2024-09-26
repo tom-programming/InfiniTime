@@ -44,14 +44,17 @@ namespace Pinetime {
           {Symbols::hourGlass, Apps::Timer},
           {Symbols::shoe, Apps::Steps},
           {Symbols::heartBeat, Apps::HeartRate},
+#ifdef MUS
           {Symbols::music, Apps::Music},
-
+#endif
           {Symbols::paintbrush, Apps::Paint},
           {Symbols::paddle, Apps::Paddle},
           {"2", Apps::Twos},
           {Symbols::chartLine, Apps::Motion},
           {Symbols::drum, Apps::Metronome},
+#ifdef NAV
           {Symbols::map, Apps::Navigation},
+#endif
         }};
         ScreenList<nScreens> screens;
       };

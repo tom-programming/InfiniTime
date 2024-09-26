@@ -41,16 +41,28 @@ Clock::Clock(DisplayApp* app,
           return WatchFaceDigitalScreen();
           break;
         case 1:
+#ifdef WP
           return WatchFaceAnalogScreen();
+#else
+          return WatchFaceDigitalScreen();
+#endif          
           break;
         case 2:
+#ifdef WP
           return WatchFacePineTimeStyleScreen();
+#else
+          return WatchFaceDigitalScreen();
+#endif
           break;
         case 3:
           return WatchFaceTerminalScreen();
           break;
         case 4:
+#ifdef WP
           return WatchFaceInfineatScreen();
+#else
+          return WatchFaceDigitalScreen();
+#endif
           break;
         case 5:
           return WatchFaceCasioStyleG7710();
@@ -84,6 +96,7 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
                                                      motionController);
 }
 
+#ifdef WP
 std::unique_ptr<Screen> Clock::WatchFaceAnalogScreen() {
   return std::make_unique<Screens::WatchFaceAnalog>(app,
                                                     dateTimeController,
@@ -102,6 +115,7 @@ std::unique_ptr<Screen> Clock::WatchFacePineTimeStyleScreen() {
                                                            settingsController,
                                                            motionController);
 }
+#endif
 
 std::unique_ptr<Screen> Clock::WatchFaceTerminalScreen() {
   return std::make_unique<Screens::WatchFaceTerminal>(app,
@@ -114,6 +128,7 @@ std::unique_ptr<Screen> Clock::WatchFaceTerminalScreen() {
                                                       motionController);
 }
 
+#ifdef WP
 std::unique_ptr<Screen> Clock::WatchFaceInfineatScreen() {
   return std::make_unique<Screens::WatchFaceInfineat>(app,
                                                       dateTimeController,
@@ -124,6 +139,7 @@ std::unique_ptr<Screen> Clock::WatchFaceInfineatScreen() {
                                                       motionController,
                                                       filesystem);
 }
+#endif
 
 std::unique_ptr<Screen> Clock::WatchFaceCasioStyleG7710() {
   return std::make_unique<Screens::WatchFaceCasioStyleG7710>(app,
